@@ -1,0 +1,31 @@
+inputs:
+  question:
+    type: string
+    default: 서비스기획
+  skill:
+    type: string
+    default: figma excel power point
+  career:
+    type: string
+    default: 경력
+outputs:
+  result:
+    type: string
+    reference: ${jobtype_llm.output}
+nodes:
+- name: jobtype_llm
+  type: custom_llm
+  source:
+    type: package_with_prompt
+    tool: promptflow.tools.llm.llm
+    path: jobtype_llm.jinja2
+  inputs:
+    connection: open_ai_connection
+    api: chat
+    max_tokens: 3000
+    question: ${inputs.question}
+    temperature: 0.9
+    skill: ${inputs.skill}
+    career: ${inputs.career}
+    response_format:
+      type: json_object
